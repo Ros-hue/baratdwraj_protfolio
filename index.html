@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" class="is-booting">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>B. BHARADWAJ — Fullstack Developer · UI/UX Designer</title>
+<meta name="description" content="Welcome to my world. Portfolio of B. Bharadwaj — fullstack developer, UI/UX designer, front-end developer.">
+
+<link rel="preload" href="public/fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="public/fonts/oswald-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="public/fonts/oswald-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="src/styles/app.css">
+<link rel="stylesheet" href="src/styles/universe.css">
+<link rel="stylesheet" href="src/styles/chrono.css">
+<link rel="stylesheet" href="src/styles/projects.css">
+<link rel="stylesheet" href="src/styles/finale.css">
+</head>
+<body id="top">
+
+<!-- the real heading, for search engines and screen readers; the visible
+     wordmark is drawn on the canvas so video can be clipped inside its letters -->
+<h1 class="sr-only">B. BHARADWAJ — Fullstack Developer, UI/UX Designer, Front-End Developer. Welcome to my world.</h1>
+
+<div class="stage-wrap">
+  <canvas id="stage" aria-hidden="true"></canvas>
+
+  <!-- ------------------------------------------------------------------ -->
+  <header class="hdr" id="hdr">
+    <svg class="hdr__rule" id="hdrRule" aria-hidden="true" preserveAspectRatio="none">
+      <polyline id="hdrRulePath" fill="none" stroke="currentColor" stroke-width="1.25"
+                vector-effect="non-scaling-stroke"/>
+    </svg>
+
+    <a class="hdr__mark" href="#" aria-label="Bharadwaj, home">
+      <span class="mark-word">B.BHARADWAJ</span>
+    </a>
+
+    <span class="hdr__div" aria-hidden="true"></span>
+
+    <p class="hdr__roles">
+      <span>Fullstack</span><span>UI/UX</span><span>Front-End</span>
+    </p>
+
+    <nav class="hdr__nav" aria-label="Primary">
+      <ul>
+        <li><a href="#top" class="is-active" data-nav>Home</a></li>
+        <li><a href="#gallery" data-nav>Work</a></li>
+        <li><a href="#chrono" data-nav>About</a></li>
+        <li><a href="#universe" data-nav>Journal</a></li>
+        <li><a href="#fin" data-nav>Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="hdr__meta">
+      <span class="hdr__metaLabel">Portfolio — MMXXVI</span>
+      <span class="hdr__pips" aria-hidden="true"><i></i><i></i><i></i></span>
+    </div>
+
+    <button class="hdr__burger" id="burger" aria-expanded="false" aria-controls="hdrNavMobile">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+      <span class="sr-only">Menu</span>
+    </button>
+  </header>
+
+  <!-- ------------------------------------------------------------------ -->
+  <div class="furniture" aria-hidden="true">
+    <p class="welcome" id="welcome">
+      <b class="welcome__dots">•••</b>
+      <span class="welcome__text">Welcome to my world</span>
+      <b class="welcome__dots">•••</b>
+    </p>
+
+    <p class="chip chip--artist" id="chipArtist"><span>•Developer Bharadwaj•</span></p>
+    <p class="chip chip--legend" id="chipLegend"><span>•Legend•</span></p>
+
+    <div class="arrows arrows--l" id="arrowsL"></div>
+    <div class="arrows arrows--r" id="arrowsR"></div>
+    <!-- only the bottom-right grid remains: the top-left one sat under the
+         navigation and fought with it -->
+    <div class="grid-dots grid-dots--br" id="dotsBR"></div>
+  </div>
+
+  <!-- ------------------------------------------------------------------ -->
+  <nav class="menu" id="menu" aria-label="Primary, expanded" hidden>
+    <ul>
+      <li><a href="#top" class="is-active" data-nav>Home</a></li>
+      <li><a href="#gallery" data-nav>Work</a></li>
+      <li><a href="#chrono" data-nav>About</a></li>
+      <li><a href="#universe" data-nav>Journal</a></li>
+      <li><a href="#fin" data-nav>Contact</a></li>
+    </ul>
+    <p class="menu__tag">••• Welcome to my world •••</p>
+  </nav>
+
+  <!-- ------------------------------------------------------------------ -->
+  <div class="boot" id="boot">
+    <div class="boot__bar"><i id="bootFill"></i></div>
+    <button class="boot__enter" id="bootEnter" hidden>
+      <span>Enter</span>
+    </button>
+  </div>
+
+  <noscript>
+    <div class="fallback">
+      <p>BHARADWAJ</p>
+      <small>This opening is an animated experience. Please enable JavaScript.</small>
+    </div>
+  </noscript>
+</div>
+
+<main class="flow">
+  <!-- the hero above is position:fixed, so this reserves its scroll height -->
+  <div class="hero-spacer" aria-hidden="true"></div>
+
+  <!-- ==================================================================== -->
+  <!-- The creative-universe film itself, played as supplied. All labels and
+       cards are part of the footage; the DOM adds only what a screen reader
+       needs and a veil that breathes over the loop seam. -->
+  <section class="universe" id="universe" aria-labelledby="uniTitle">
+    <header class="universe__title" id="uniTitle">
+      <p class="universe__over">Scene 02</p>
+      <h2 class="universe__name">The Creative<br>Universe</h2>
+      <p class="universe__sub">Tools · Ideas · People · Impact</p>
+    </header>
+    <ul class="sr-only">
+      <li>Figma</li><li>Photoshop</li><li>After Effects</li><li>Premiere Pro</li>
+      <li>Lightroom</li><li>Notion</li><li>Framer</li><li>Webflow</li>
+      <li>Spline</li><li>Claude</li><li>ChatGPT</li><li>Midjourney</li>
+    </ul>
+    <video id="uniFilm" muted playsinline loop preload="metadata"
+           poster="public/media/universe.jpg" aria-hidden="true">
+      <source src="public/media/universe.mp4" type="video/mp4">
+    </video>
+    <div class="universe__veil" id="uniVeil" aria-hidden="true"></div>
+  </section>
+
+  <!-- ==================================================================== -->
+  <section class="chrono" id="chrono" aria-labelledby="chronoTitle">
+    <div class="chrono__pin">
+      <canvas id="chronoStage" aria-hidden="true"></canvas>
+
+      <h2 class="chrono__title" id="chronoTitle">
+        <span>A</span><span>Journey</span><span>Through</span><span>Time</span>
+      </h2>
+      <p class="chrono__rail" aria-hidden="true">
+        <i></i>
+        <span>Ideas</span><span>Experiences</span><span>People</span>
+        <span>Projects</span><span>Me</span>
+        <i></i>
+      </p>
+
+      <p class="chrono__hint" aria-hidden="true">
+        Move<br>to travel<br>through time<i></i>
+      </p>
+      <p class="chrono__note chrono__note--bl" aria-hidden="true">
+        Same<br>curiosity<br>a brighter<br>tomorrow
+      </p>
+      <p class="chrono__note chrono__note--br" aria-hidden="true">
+        Still<br>designing<br>what's<br>next<i></i>
+      </p>
+
+      <div class="chrono__deck" id="chronoDeck"></div>
+
+      <!-- the figure's own layer, stacked over the deck: he stands in front
+           of the timeline, looking at his journey -->
+      <canvas id="chronoFront" aria-hidden="true"></canvas>
+    </div>
+  </section>
+
+  <!-- ==================================================================== -->
+  <section class="gallery" id="gallery" aria-labelledby="galleryTitle">
+    <div class="gallery__pin">
+      <canvas id="galleryStage" aria-hidden="true"></canvas>
+
+      <div class="gallery__world">
+        <div class="gallery__deck" id="galleryDeck"></div>
+        <img class="gallery__person" id="galleryPerson"
+             src="public/projects/person.png" alt="" draggable="false">
+      </div>
+
+      <h2 class="g-label g-label--projects" id="galleryTitle">Projects</h2>
+      <p class="g-label g-label--ideas" aria-hidden="true">
+        Ideas<br>Interfaces<br>Experiences<br><b>Real Impact</b>
+      </p>
+      <p class="g-label g-label--scroll" aria-hidden="true">
+        Scroll<br>Explore<br>Interact
+      </p>
+      <p class="g-label g-label--real" aria-hidden="true">
+        Real<br>Projects<br>Real<br>Stories
+      </p>
+      <p class="g-label g-label--tomorrow" aria-hidden="true">
+        Designing<br>A Brighter<br>Tomorrow
+      </p>
+      <span class="g-label g-label--num" id="galleryNum" aria-hidden="true">01</span>
+    </div>
+  </section>
+  <section>
+    
+      <img src="footer 2nd image.png" alt="B. Bharadwaj">
+      <img src="Footer image.png" alt="B. Bharadwaj" >
+
+  </section>
+
+</main>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

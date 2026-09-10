@@ -1,0 +1,533 @@
+/* ==========================================================================
+   B.BHARADWAJ — hero
+   The artwork itself (background, wordmark, the three people) is drawn on the
+   WebGL canvas. Everything in this file is the furniture layered over it:
+   header, welcome strip, chips, arrows, dot grids.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Anton';
+  src: url('../../public/fonts/anton-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('../../public/fonts/oswald-300.woff2') format('woff2');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('../../public/fonts/oswald-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('../../public/fonts/oswald-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('../../public/fonts/oswald-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('../../public/fonts/oswald-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  --ink:      #de1b1c;
+  --ink-hot:  #ff2a2b;
+  --paper:    #ededed;
+  --black:    #000;
+  --dim:      #8a8a8a;
+  --dimmer:   #4e4e4e;
+
+  --ui:  'Oswald', 'Arial Narrow', system-ui, sans-serif;
+  --disp:'Anton', 'Arial Narrow', Impact, sans-serif;
+
+  /* the header height also sets the hero's top breathing room */
+  --hdr-h: clamp(56px, 7.4vh, 82px);
+  --edge:  clamp(14px, 1.55vw, 26px);
+
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.76, 0, .24, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #000;
+  color: var(--paper);
+  font-family: var(--ui);
+  /* the document scrolls now that more scenes follow the hero; sideways
+     overflow is CLIPPED, not hidden - overflow-x:hidden promotes body to a
+     scroll container, which silently breaks every position:sticky pin in the
+     scenes below (the canvas scrolls away and leaves bare background) */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* nothing may paint before the sequence is ready to start on true black */
+html.is-booting .furniture,
+html.is-booting .hdr { opacity: 0; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.stage-wrap {
+  position: fixed; inset: 0;
+  overflow: hidden;
+  background: #000;
+  z-index: 1;
+}
+
+#stage {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.hdr {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: var(--hdr-h);
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 26px);
+  padding: 0 var(--edge);
+  z-index: 20;
+  pointer-events: none;
+}
+.hdr > * { pointer-events: auto; }
+
+.hdr__rule {
+  position: absolute; left: 0; right: 0; top: 0;
+  width: 100%; height: 100%;
+  color: #6d6d6d;
+  pointer-events: none;
+  overflow: visible;
+}
+.hdr__rule polyline {
+  stroke-dasharray: var(--len, 2000);
+  stroke-dashoffset: var(--len, 2000);
+}
+.is-header .hdr__rule polyline {
+  transition: stroke-dashoffset 1.15s var(--ease-out);
+  stroke-dashoffset: 0;
+}
+
+.hdr__mark {
+  text-decoration: none;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+.mark-word {
+  display: block;
+  font-family: var(--disp);
+  font-size: clamp(20px, 2.05vw, 34px);
+  letter-spacing: .012em;
+  /* the same distressed surface as the big wordmark, so the two agree.
+     NB the red must be a background-color: with background-clip:text the
+     text fill is transparent, so `color` alone paints nothing and the mark
+     comes out as bare grey texture. */
+  background-color: var(--ink);
+  background-image: url('../../public/tex/grunge.png');
+  background-size: 260px;
+  background-blend-mode: multiply;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: saturate(1.35) contrast(1.16) brightness(1.18);
+}
+
+.hdr__div {
+  width: 1px; height: 42%;
+  background: #3a3a3a;
+  flex: 0 0 auto;
+}
+
+.hdr__roles {
+  margin: 0;
+  display: grid;
+  gap: 1px;
+  font-size: clamp(7.5px, .61vw, 9.5px);
+  font-weight: 400;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--dim);
+  line-height: 1.42;
+  flex: 0 0 auto;
+}
+
+.hdr__nav { margin-inline: auto; }
+.hdr__nav ul {
+  display: flex;
+  gap: clamp(16px, 2.4vw, 44px);
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.hdr__nav a {
+  position: relative;
+  display: block;
+  padding: 6px 0;
+  font-size: clamp(9px, .72vw, 11.5px);
+  font-weight: 500;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--dim);
+  transition: color .38s var(--ease-out);
+}
+.hdr__nav a::after {                       /* the red dot under the active item */
+  content: '';
+  position: absolute;
+  left: 50%; bottom: -3px;
+  width: 4px; height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: scale(0);
+  transition: transform .42s var(--ease-out);
+}
+.hdr__nav a:hover, .hdr__nav a:focus-visible { color: var(--paper); }
+.hdr__nav a.is-active { color: var(--paper); }
+.hdr__nav a.is-active::after,
+.hdr__nav a:hover::after { transform: scale(1); }
+
+.hdr__meta {
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+.hdr__metaLabel {
+  font-size: clamp(7.5px, .6vw, 9.5px);
+  font-weight: 400;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.hdr__pips { display: flex; gap: 5px; }
+.hdr__pips i {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--ink);
+  opacity: .9;
+}
+
+.hdr__burger { display: none; }
+
+/* staggered arrival ------------------------------------------------------ */
+.hdr__mark, .hdr__div, .hdr__roles, .hdr__nav li, .hdr__meta {
+  opacity: 0;
+  transform: translateY(-9px);
+}
+.is-header .hdr__mark,
+.is-header .hdr__div,
+.is-header .hdr__roles,
+.is-header .hdr__nav li,
+.is-header .hdr__meta {
+  opacity: 1;
+  transform: none;
+  transition: opacity .7s var(--ease-out), transform .8s var(--ease-out);
+}
+.is-header .hdr__mark   { transition-delay: .18s; }
+.is-header .hdr__div    { transition-delay: .26s; }
+.is-header .hdr__roles  { transition-delay: .30s; }
+.is-header .hdr__nav li { transition-delay: calc(.36s + var(--i) * .055s); }
+.is-header .hdr__meta   { transition-delay: .62s; }
+
+/* ==========================================================================
+   Hero furniture
+   ========================================================================== */
+
+.furniture {
+  position: absolute; inset: 0;
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* --- WELCOME TO MY WORLD: drops in from above ---------------------------
+   Sits ABOVE every other layer except the header, and carries its own soft
+   dark halo, so it stays legible whatever passes behind it — the wordmark,
+   the figure's head, or plain black.                                       */
+.welcome {
+  position: absolute;
+  top: var(--welcome-y, 17.5%);
+  left: 50%;
+  z-index: 4;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: .55em;
+  white-space: nowrap;
+  font-size: var(--welcome-size, 17px);
+  font-weight: 700;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow:
+    0 0 .06em rgba(0, 0, 0, .95),
+    0 0 .55em rgba(0, 0, 0, .92),
+    0 0 1.4em rgba(0, 0, 0, .75);
+  transform: translate(-50%, calc(-140% - 12px));
+  opacity: 0;
+  filter: blur(6px);
+}
+.welcome__dots { letter-spacing: .12em; font-size: .96em; }
+.is-welcome .welcome {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate(-50%, -50%);
+  /* fast, confident entrance that overshoots a touch, then settles */
+  transition:
+    transform .82s cubic-bezier(.14, .86, .22, 1.06),
+    opacity .34s ease-out,
+    filter .5s var(--ease-out);
+}
+
+/* --- inverted chips ----------------------------------------------------- */
+.chip {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+  padding: .30em .5em .24em;
+  background: var(--paper);
+  color: #060606;
+  font-size: var(--chip-size, 13px);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+}
+.chip--artist {
+  left: var(--artist-x, 1.5%);
+  top: var(--artist-y, 68.8%);
+  transform: translateX(-118%);
+}
+.chip--legend {
+  left: var(--legend-x, 88.1%);
+  top: var(--legend-y, 26.8%);
+  transform: translateX(118%);
+}
+.is-artist .chip--artist,
+.is-legend .chip--legend {
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform .78s var(--ease-out), opacity .3s linear;
+}
+
+/* --- edge arrows -------------------------------------------------------- */
+.arrows {
+  position: absolute;
+  top: var(--arrow-top, 34.5%);
+  height: var(--arrow-span, 28%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.arrows--l { left: var(--arrow-l, 1.8%); }
+.arrows--r { left: var(--arrow-r, 97.5%); }
+.arrows i {
+  display: block;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: var(--arrow-h, 7px) 0 var(--arrow-h, 7px) var(--arrow-w, 11px);
+  border-color: transparent transparent transparent var(--paper);
+  opacity: 0;
+}
+.arrows--l i { transform: translateX(-26px); }
+.arrows--r i { transform: translateX(26px); }
+.is-arrows .arrows i {
+  opacity: .92;
+  transform: none;
+  transition: transform .62s var(--ease-out), opacity .4s linear;
+  transition-delay: calc(var(--i) * .06s);
+}
+.is-arrows .arrows--r i { transition-delay: calc((4 - var(--i)) * .06s); }
+
+/* --- corner dot grids --------------------------------------------------- */
+.grid-dots {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--dot-gap, 6px);
+}
+.grid-dots--br {
+  left: var(--dots-br-x, 98.4%); top: var(--dots-br-y, 95%);
+  transform: translate(-100%, -100%);
+}
+.grid-dots i {
+  display: block;
+  width: var(--dot-size, 9px);
+  height: var(--dot-size, 9px);
+  border-radius: 50%;
+  background: var(--paper);
+  opacity: 0;
+  transform: scale(.2);
+}
+.is-dots .grid-dots i {
+  opacity: .95;
+  transform: none;
+  transition: transform .5s var(--ease-out), opacity .34s linear;
+  transition-delay: calc(var(--i) * .022s);
+}
+
+/* ==========================================================================
+   Mobile menu — the burger opens a full-bleed sheet in the artwork's voice
+   ========================================================================== */
+
+.menu {
+  position: absolute; inset: 0;
+  z-index: 18;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, .93);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease, visibility .45s;
+}
+.is-menu .menu { opacity: 1; visibility: visible; }
+.menu ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.menu a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-family: var(--disp);
+  font-size: clamp(38px, 11vw, 64px);
+  line-height: 1.06;
+  color: var(--ink);
+  background-color: var(--ink);
+  background-image: url('../../public/tex/grunge.png');
+  background-size: 300px;
+  background-blend-mode: multiply;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: saturate(1.3) contrast(1.12) brightness(1.15);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .4s ease, transform .55s var(--ease-out);
+}
+.menu a.is-active, .menu a:hover { filter: saturate(1.5) contrast(1.2) brightness(1.4); }
+.is-menu .menu a {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(.06s + var(--i, 0) * .05s);
+}
+.menu__tag {
+  margin: 26px 0 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--dim);
+  opacity: 0;
+  transition: opacity .5s ease .3s;
+}
+.is-menu .menu__tag { opacity: 1; }
+
+/* ==========================================================================
+   Boot / loading — deliberately almost invisible
+   ========================================================================== */
+
+.boot {
+  position: absolute; inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: #000;
+  transition: opacity .5s ease-out, visibility .5s;
+}
+.boot.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.boot__bar {
+  width: min(148px, 26vw);
+  height: 1px;
+  background: rgba(255, 255, 255, .13);
+  overflow: hidden;
+  opacity: 0;
+  animation: bootIn .5s ease-out .35s forwards;   /* only if loading is slow */
+}
+.boot__bar i {
+  display: block; height: 100%; width: 0%;
+  background: var(--paper);
+  transition: width .3s ease-out;
+}
+@keyframes bootIn { to { opacity: 1; } }
+
+.boot__enter {
+  position: absolute;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: transparent;
+  color: var(--paper);
+  font-family: var(--ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  padding: 14px 30px 12px;
+  cursor: pointer;
+  transition: background .35s, border-color .35s, letter-spacing .35s;
+}
+.boot__enter:hover { background: var(--ink); border-color: var(--ink); letter-spacing: .4em; }
+
+.fallback {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; text-align: center; gap: 12px;
+}
+.fallback p {
+  font-family: var(--disp); font-size: 16vw; color: var(--ink); margin: 0;
+}
+.fallback small { color: var(--dim); letter-spacing: .2em; text-transform: uppercase; }
+
+/* ==========================================================================
+   Small screens — the composition is landscape by nature, so on a phone the
+   furniture thins out rather than piling up on top of the wordmark.
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .hdr { gap: 10px; }
+  .hdr__div, .hdr__roles, .hdr__meta { display: none; }
+  .hdr__nav { display: none; }
+  .hdr__burger {
+    display: grid;
+    gap: 5px;
+    margin-left: auto;
+    appearance: none; border: 0; background: none; padding: 6px 0;
+    cursor: pointer;
+  }
+  .hdr__burger span {
+    display: block; width: 26px; height: 1.5px; background: var(--paper);
+    transition: transform .4s var(--ease-out);
+  }
+  .hdr__burger[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .hdr__burger[aria-expanded="true"] span:last-child  { transform: translateY(-3.25px) rotate(-45deg); }
+
+  .arrows { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome, .chip, .arrows i, .grid-dots i,
+  .hdr__mark, .hdr__div, .hdr__roles, .hdr__nav li, .hdr__meta {
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

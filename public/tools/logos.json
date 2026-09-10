@@ -1,0 +1,62 @@
+{
+ "photoshop": {
+  "w": 132,
+  "h": 143,
+  "cover": 0.358
+ },
+ "figma": {
+  "w": 140,
+  "h": 239,
+  "cover": 0.336
+ },
+ "aftereffects": {
+  "w": 84,
+  "h": 74,
+  "cover": 0.362
+ },
+ "premiere": {
+  "w": 63,
+  "h": 70,
+  "cover": 0.393
+ },
+ "notion": {
+  "w": 95,
+  "h": 132,
+  "cover": 0.218
+ },
+ "lightroom": {
+  "w": 61,
+  "h": 70,
+  "cover": 0.245
+ },
+ "claude": {
+  "w": 168,
+  "h": 212,
+  "cover": 0.262
+ },
+ "chatgpt": {
+  "w": 158,
+  "h": 114,
+  "cover": 0.147
+ },
+ "midjourney": {
+  "w": 137,
+  "h": 161,
+  "cover": 0.101
+ },
+ "spline": {
+  "w": 149,
+  "h": 73,
+  "cover": 0.292
+ },
+ "framer": {
+  "w": 80,
+  "h": 135,
+  "cover": 0.189
+ },
+ "webflow": {
+  "w": 106,
+  "h": 114,
+  "cover": 0.342
+ }
+}

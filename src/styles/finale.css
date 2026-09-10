@@ -1,0 +1,225 @@
+/* ==========================================================================
+   The finale — the closing shot.
+   Deep black + dark red + crimson + cream. The furnace canvas sits behind a
+   giant BHARADWAJ set in real type (Anton, stretched to the reference's
+   ultra-tall poster proportions, wearing the extracted grunge), the man's
+   canvas rides in front of the title, and the editorial captions + the quiet
+   functional row hold the edges.
+   ========================================================================== */
+
+/* Two frames of one closing scene: the pinned stage holds frame 1 (the
+   BHARADWAJ composition) while the extra scroll room drives frame 2 sliding in
+   from the left over it. */
+.fin {
+  position: relative;
+  height: 240svh;
+  background: #000;
+}
+
+.fin__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.fin__stage1 {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+#finBack,
+#finMan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#finBack { z-index: 1; }
+#finMan { z-index: 3; pointer-events: none; }
+
+/* dims frame 1 as frame 2 advances over it */
+.fin__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Frame 2 — the supplied still, full-bleed, entering from the LEFT under
+   scroll control (boot6 writes its transform). Its leading edge throws a
+   soft shadow onto frame 1, and a grain veil keeps it in the film's stock.
+   -------------------------------------------------------------------------- */
+.fin__frame2 {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  margin: 0;
+  transform: translate3d(-104%, 0, 0);
+  will-change: transform, filter;
+  pointer-events: none;
+  box-shadow: 42px 0 110px rgba(0, 0, 0, 0.62);
+  background: #0a0203;
+}
+.fin__frame2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+  display: block;
+  user-select: none;
+}
+.fin__frame2::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../../public/tex/grain.png') repeat;
+  background-size: 340px;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Editorial captions — cream letterspaced, red punctuation.
+   -------------------------------------------------------------------------- */
+
+.f-cap {
+  position: absolute;
+  margin: 0;
+  z-index: 4;
+  font-family: var(--ui);
+  font-size: clamp(8px, 0.72vw, 12px);
+  font-weight: 400;
+  line-height: 2.1;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(233, 220, 208, 0.72);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease calc(var(--li, 0) * 0.15s),
+              transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--li, 0) * 0.15s);
+  pointer-events: none;
+}
+.fin.is-caps .f-cap { opacity: 1; transform: none; }
+
+.f-cap--tl {
+  top: clamp(22px, 6vh, 58px);
+  left: clamp(24px, 3.6vw, 62px);
+  padding-left: 1.2em;
+  border-left: 2px solid #b3271d;
+}
+.f-cap--quote {
+  top: 38%;
+  left: clamp(24px, 3.2vw, 56px);
+  font-size: clamp(10px, 0.92vw, 15px);
+  letter-spacing: 0.34em;
+  color: rgba(240, 230, 220, 0.88);
+}
+.f-cap--quote::after {
+  content: '';
+  display: block;
+  width: 2.1em;
+  height: 2px;
+  margin-top: 1.5em;
+  background: #b3271d;
+}
+.f-cap--blw {
+  bottom: clamp(64px, 11vh, 110px);
+  left: clamp(24px, 3.6vw, 62px);
+  padding-left: 1.2em;
+  border-left: 2px solid #b3271d;
+}
+.f-cap--tr {
+  top: clamp(22px, 6vh, 58px);
+  right: clamp(24px, 3.6vw, 62px);
+}
+.f-cap--tr::after,
+.f-cap--br::after {
+  content: '';
+  display: block;
+  width: 1.8em;
+  height: 2px;
+  margin-top: 1.2em;
+  background: #b3271d;
+}
+.f-cap--br {
+  bottom: clamp(64px, 11vh, 110px);
+  right: clamp(24px, 3.6vw, 62px);
+}
+
+/* --------------------------------------------------------------------------
+   The functional row — a real footer, whispering. Sits on the bottom edge
+   without breaking the frame.
+   -------------------------------------------------------------------------- */
+
+.fin__bar {
+  position: absolute;
+  z-index: 7;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px clamp(20px, 3.6vw, 62px) 16px;
+  font-family: var(--ui);
+  font-size: clamp(8px, 0.66vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(216, 186, 174, 0.5);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1s ease, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fin.is-bar .fin__bar { opacity: 1; transform: none; }
+
+.fin__bar a {
+  color: rgba(233, 220, 208, 0.7);
+  text-decoration: none;
+  transition: color 0.35s ease, text-shadow 0.35s ease;
+}
+.fin__bar a:hover,
+.fin__bar a:focus-visible {
+  color: #f4ecdd;
+  text-shadow: 0 0 14px rgba(220, 60, 40, 0.55);
+  outline: none;
+}
+.fin__soc {
+  display: flex;
+  gap: 2.4em;
+}
+.fin__c { font-size: inherit; letter-spacing: 0.24em; }
+
+/* --------------------------------------------------------------------------
+   Portrait + fallbacks
+   -------------------------------------------------------------------------- */
+
+.fin.is-portrait .f-cap--tr,
+.fin.is-portrait .f-cap--tl,
+.fin.is-portrait .f-cap--blw { display: none; }
+.fin.is-portrait .f-cap--quote { top: auto; bottom: 24vh; }
+.fin.is-portrait .fin__bar {
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.fin.is-fallback #finBack,
+.fin.is-fallback #finMan { display: none; }
+.fin.is-fallback {
+  background: #000 url('../../public/fin/plate.png') center / cover no-repeat;
+}
+.fin.is-set .f-cap,
+.fin.is-set .fin__bar { opacity: 1; transform: none; filter: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .f-cap, .fin__bar { transition-duration: 0.01ms; transition-delay: 0s; }
+}

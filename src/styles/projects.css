@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Scene four — the project universe.
+   The reference image is rebuilt as living layers: the room is the extracted
+   plate on canvas, the twelve screens are DOM buttons wearing sprites cut
+   from that same image, the creator is its matted centre. This sheet carries
+   the layer stack, the hover life and the caption typography; the entrance
+   choreography itself is driven per-frame from boot4.js.
+   ========================================================================== */
+
+.gallery {
+  position: relative;
+  height: 260svh;
+  background: #000;
+}
+
+.gallery__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+#galleryStage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* the 3D room the cards live in */
+.gallery__world {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+  perspective-origin: 50% 42%;
+}
+
+.gallery__deck {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Cards. The sprite carries the reference's own bezel, rim light and glow,
+   so the button is chrome-free: no border, no background — just the pixels,
+   an easing inner shell for hover/float, and a tinted shadow when lifted.
+   -------------------------------------------------------------------------- */
+
+.g-card {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.g-card__in {
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.5s ease;
+  animation: gFloat calc(5.6s + var(--i, 0) * 0.63s) ease-in-out
+             calc(var(--i, 0) * -1.27s) infinite alternate paused;
+}
+.gallery.is-live .g-card__in { animation-play-state: running; }
+
+.g-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* hover: toward the camera, a touch brighter, its glow deepened — and the
+   rest of the room eases back a breath so the depth reads */
+.g-card:hover .g-card__in,
+.g-card:focus-visible .g-card__in {
+  transform: translateZ(30px) scale(1.022);
+  filter: brightness(1.12) drop-shadow(0 10px 34px var(--tint, rgba(255, 140, 60, 0.4)));
+}
+.g-card:focus-visible {
+  outline: none;
+}
+.gallery__deck.is-hot .g-card:not(:hover):not(:focus-visible) .g-card__in {
+  transform: translateZ(-12px) scale(0.992);
+  filter: brightness(0.9);
+}
+
+@keyframes gFloat {
+  from { translate: 0 0; rotate: 0.001deg; }
+  to { translate: 0 -7px; rotate: -0.35deg; }
+}
+
+.gallery__person {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+/* --------------------------------------------------------------------------
+   Corner captions — the reference's HUD. Letterspaced hairline sans, amber
+   headline, dashes as punctuation. They type themselves in on .is-labels.
+   -------------------------------------------------------------------------- */
+
+.g-label {
+  position: absolute;
+  margin: 0;
+  font-family: var(--ui);
+  font-size: clamp(8px, 0.72vw, 12px);
+  font-weight: 400;
+  line-height: 2.05;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(212, 208, 205, 0.6);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.9s ease calc(var(--li, 0) * 0.14s),
+              transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--li, 0) * 0.14s);
+  pointer-events: none;
+}
+.gallery.is-labels .g-label { opacity: 1; transform: none; }
+
+.g-label--projects {
+  top: clamp(18px, 3.8vh, 40px);
+  left: clamp(20px, 3vw, 52px);
+  font-size: clamp(10px, 0.92vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.52em;
+  color: #d8b183;
+}
+.g-label--projects::after,
+.g-label--ideas::after,
+.g-label--scroll::after,
+.g-label--tomorrow::after {
+  content: '';
+  display: block;
+  width: 1.6em;
+  height: 1px;
+  margin-top: 1.1em;
+  background: currentColor;
+  opacity: 0.55;
+}
+.g-label--ideas {
+  top: clamp(90px, 15.5vh, 150px);
+  left: clamp(20px, 3vw, 52px);
+}
+.g-label--ideas b { font-weight: 500; color: rgba(232, 226, 220, 0.82); }
+.g-label--scroll {
+  top: clamp(18px, 4vh, 42px);
+  right: clamp(20px, 3vw, 52px);
+}
+.g-label--real {
+  bottom: clamp(20px, 6vh, 60px);
+  left: clamp(20px, 3vw, 52px);
+}
+.g-label--tomorrow {
+  bottom: clamp(20px, 6vh, 60px);
+  right: clamp(20px, 3vw, 52px);
+}
+
+/* the red index over the hero screen — placed by boot4 from frame coords */
+.g-label--num {
+  font-family: var(--ui);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: #c8382b;
+  transition-delay: 0.5s;
+}
+
+/* --------------------------------------------------------------------------
+   Portrait: recomposition (layout4.PORTRAIT places the survivors); the rest
+   of the deck sits this orientation out. Captions tighten into two rows.
+   -------------------------------------------------------------------------- */
+
+.gallery.is-portrait .g-label--ideas { top: clamp(64px, 9vh, 110px); }
+.gallery.is-portrait .g-label--real,
+.gallery.is-portrait .g-label--tomorrow { bottom: clamp(14px, 3vh, 30px); }
+.gallery.is-portrait .g-label--num { display: none; }
+
+/* --------------------------------------------------------------------------
+   Fallbacks
+   -------------------------------------------------------------------------- */
+
+.gallery.is-fallback #galleryStage { display: none; }
+.gallery.is-fallback .gallery__pin {
+  background: #000 url('../../public/projects/plate.jpg') center / cover no-repeat;
+}
+.gallery.is-set .g-card,
+.gallery.is-set .gallery__person { opacity: 1; }
+.gallery.is-set .g-label { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .g-card__in { animation: none; }
+  .g-label { transition-duration: 0.01ms; transition-delay: 0s; }
+}

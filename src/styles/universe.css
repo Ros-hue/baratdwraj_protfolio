@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Scene two — the creative universe.
+   This is the supplied film played AS the section, not a recreation of it:
+   the cards, the red light-painting, the embers and every corner label are
+   part of the footage. The page's job is to present it cinematically — arrive
+   from black, hold the frame, and breathe over the loop seam — and to stay
+   out of its way.
+   ========================================================================== */
+
+.flow {
+  position: relative;
+  z-index: 2;
+}
+
+/* The hero is position:fixed, so its scroll height has to be reserved here or
+   the universe would start at the top of the document and sit on top of it. */
+.hero-spacer {
+  height: 100svh;
+  pointer-events: none;
+}
+
+.universe {
+  position: relative;
+  height: 100svh;
+  background: #000;
+  overflow: hidden;
+  /* hard cut from the hero: two scenes, not a gradient between them */
+  box-shadow: 0 -1px 0 0 #000;
+}
+
+#uniFilm {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* the film is 16:9; any other viewport crops rather than letterboxes,
+     keeping the figure centred and the frame full-bleed */
+  object-fit: cover;
+  object-position: 50% 42%;
+  opacity: 0;
+  transform: scale(1.045);
+  transition: opacity 1.9s var(--ease-out), transform 3.2s var(--ease-out);
+}
+.universe.is-on #uniFilm {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   The chapter title, set over the film. Top-centre is the one region the
+   footage keeps dark (the ceiling above the figure), so the text lives there
+   and clears the Ps and Claude cards that hold the upper corners.
+   -------------------------------------------------------------------------- */
+
+.universe__title {
+  position: absolute;
+  top: clamp(26px, 6.5vh, 66px);
+  left: 50%;
+  transform: translate(-50%, 14px);
+  z-index: 2;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.3s var(--ease-out) 0.75s,
+              transform 1.6s var(--ease-out) 0.75s;
+}
+.universe.is-on .universe__title { opacity: 1; transform: translate(-50%, 0); }
+
+.universe__over {
+  margin: 0 0 0.9em;
+  font-family: var(--ui);
+  font-size: clamp(7.5px, 0.62vw, 9.5px);
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;        /* recentre what the tracking pushes right */
+  text-transform: uppercase;
+  color: #b98a6a;
+}
+.universe__name {
+  margin: 0;
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(20px, 2.3vw, 36px);
+  line-height: 1.22;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+  color: #f2e8dc;
+  text-shadow: 0 0 0.6em rgba(0, 0, 0, 0.9), 0 0 2em rgba(0, 0, 0, 0.7);
+}
+.universe__sub {
+  margin: 1.1em 0 0;
+  font-family: var(--ui);
+  font-size: clamp(7.5px, 0.6vw, 9.5px);
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: rgba(222, 200, 180, 0.55);
+}
+
+@media (max-width: 760px) {
+  .universe__name { letter-spacing: 0.18em; text-indent: 0.18em; }
+}
+
+/* breathes to black across the film's loop point so the cut is never seen,
+   and doubles as the entrance veil */
+.universe__veil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.universe.is-fallback::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000 url('../../public/media/universe.jpg') center / cover no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #uniFilm, .universe__title { transition-duration: 0.01ms; transition-delay: 0s; transform: none; }
+  .universe.is-on .universe__title { transform: translate(-50%, 0); }
+}
