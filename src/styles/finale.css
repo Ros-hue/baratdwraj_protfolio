@@ -223,3 +223,29 @@
 @media (prefers-reduced-motion: reduce) {
   .f-cap, .fin__bar { transition-duration: 0.01ms; transition-delay: 0s; }
 }
+
+
+/* Full-width image section added at the end of the portfolio. */
+.footer-images {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.footer-images img {
+  width: 50%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .footer-images {
+    min-height: 70vh;
+  }
+
+  .footer-images img {
+    height: 70vh;
+  }
+}
